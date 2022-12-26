@@ -1,0 +1,39 @@
+name: "Setup webOS NDK"
+description: "Setup NDK for webOS"
+branding:
+  color: red
+  icon: tv
+
+inputs:
+  install-location:
+    description: "Install location of the NDK"
+    default: "/tmp"
+    required: true
+  version:
+    description: "NDK Release (See https://github.com/openlgtv/buildroot-nc4/releases)"
+    default: 'webos-0d62420'
+    required: true
+
+outputs:
+  cmake-toolchain:
+    description: "Path to CMake toolchain for cross compiling"
+    value: ${{ inputs.install-location }}/arm-webos-linux-gnueabi_sdk-buildroot/usr/share/buildroot/toolchainfile.cmake
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Required Build Tools
+      shell: bash
+      run: sudo apt-get -y -qq install cmake
+
+    - name: Download webOS NDK
+      shell: bash
+      working-directory: ${{ inputs.install-location }}
+      run: wget -qO https://github.com/openlgtv/buildroot-nc4/releases/download/webos-6e2e155/arm-webos-linux-gnueabi_sdk-buildroot.tar.gz
+
+    - name: Extract webOS NDK
+      shell: bash
+      working-directory: ${{ inputs.install-location }}
+      run: |
+        tar xzf arm-webos-linux-gnueabi_sdk-buildroot.tar.gz
+        ./arm-webos-linux-gnueabi_sdk-buildroot/relocate-sdk.sh
