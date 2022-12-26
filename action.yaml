@@ -29,11 +29,11 @@ runs:
     - name: Download webOS NDK
       shell: bash
       working-directory: ${{ inputs.install-location }}
-      run: wget -qO https://github.com/openlgtv/buildroot-nc4/releases/download/webos-6e2e155/arm-webos-linux-gnueabi_sdk-buildroot.tar.gz
+      run: wget -q -O "dl_${{ inputs.version }}.tar.gz" "https://github.com/openlgtv/buildroot-nc4/releases/download/${{ inputs.version }}/arm-webos-linux-gnueabi_sdk-buildroot.tar.gz"
 
     - name: Extract webOS NDK
       shell: bash
       working-directory: ${{ inputs.install-location }}
       run: |
-        tar xzf arm-webos-linux-gnueabi_sdk-buildroot.tar.gz
+        tar xzf "dl_${{ inputs.version }}.tar.gz"
         ./arm-webos-linux-gnueabi_sdk-buildroot/relocate-sdk.sh
